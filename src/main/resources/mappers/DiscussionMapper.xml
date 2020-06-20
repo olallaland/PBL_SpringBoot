@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="example.DiscussionMapper">
+
+
+    <select id="selectDiscussion" parameterType="com.example.sp.request.ProjectRequest" resultType="com.example.sp.model.Discussion">
+        select * from discussion
+        where course_id = #{course_id,jdbcType=VARCHAR} and pj_id = #{pj_id, jdbcType=VARCHAR}
+    </select>
+
+
+    <insert id="insertDiscussion" parameterType="com.example.sp.model.Discussion">
+        insert into discussion (course_id, pj_id, initiator, title, question, start)
+        values (#{course_id}, #{pj_id}, #{initiator}, #{title}, #{question}, #{start})
+    </insert>
+
+
+
+    <select id="selectDiscussion_answer" parameterType="com.example.sp.model.Discussion_answer" resultType="com.example.sp.model.Discussion_answer">
+        select * from discussion_answer
+        where discussion_id = #{discussion_id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insertDiscussion_answer" parameterType="com.example.sp.model.Discussion_answer">
+        insert into discussion_answer (user_id, discussion_id, answer_time, content)
+        values (#{user_id}, #{discussion_id}, #{answer_time}, #{content})
+    </insert>
+
+
+</mapper>

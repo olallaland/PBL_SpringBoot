@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="example.MissionMapper">
+
+    <select id="getMissionList" parameterType="com.example.sp.request.ProjectRequest" resultType="com.example.sp.model.Mission">
+        select * from mission
+        where course_id = #{course_id,jdbcType=VARCHAR} and pj_id = #{pj_id, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectMission" parameterType="com.example.sp.model.Mission" resultType="com.example.sp.model.Mission">
+        select * from mission
+        where course_id = #{course_id,jdbcType=VARCHAR} and pj_id = #{pj_id, jdbcType=VARCHAR} and mission_id = #{mission_id, jdbcType=VARCHAR}
+    </select>
+
+
+    <insert id="insertMission" parameterType="com.example.sp.model.Mission">
+        insert into mission (course_id, pj_id, mission_id, stu_id, level, status, mission_name, start, end)
+        values (#{course_id}, #{pj_id}, #{mission_id}, #{stu_id}, #{level}, #{status},#{mission_name}, #{start}, #{end})
+    </insert>
+
+
+    <update id="updateMission" parameterType="com.example.sp.model.Mission" >
+        update mission
+        set stu_id = #{stu_id,jdbcType=VARCHAR},start = #{start},end = #{end},level = #{level,jdbcType=VARCHAR},status = #{status,jdbcType=VARCHAR},mission_name = #{mission_name,jdbcType=VARCHAR}
+        where course_id = #{course_id,jdbcType=VARCHAR} and pj_id = #{pj_id,jdbcType=VARCHAR} and mission_id = #{mission_id,jdbcType=VARCHAR}
+    </update>
+
+    <!-- 获得某个同学的 mission 情况 -->
+    <select id="getStudentMissionInfo" parameterType="com.example.sp.request.MissionRequest" resultType="com.example.sp.model.Mission">
+        select * from mission
+        where course_id = #{course_id,jdbcType=VARCHAR} and pj_id = #{pj_id, jdbcType=VARCHAR} and stu_id = #{student_id, jdbcType=VARCHAR}
+    </select>
+
+
+    <delete id="deleteMissionById" parameterType="com.example.sp.model.Mission" >
+        delete from mission
+        where course_id = #{course_id,jdbcType=VARCHAR} and pj_id = #{pj_id,jdbcType=VARCHAR} and mission_id = #{mission_id, jdbcType=VARCHAR}
+    </delete>
+</mapper>

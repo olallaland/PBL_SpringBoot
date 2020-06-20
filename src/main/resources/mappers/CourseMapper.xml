@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="example.CourseMapper">
+
+
+    <select id="RootSelectCourse" resultType="com.example.sp.model.CourseInfo">
+        select course.course_id, course.name as course_name, course.course_time, course.exam_time,
+               course.descs, teacher.name as teacher_name, teacher.teacher_id, course_number.amount
+        from teacher, course, teach_course, course_number
+        where course.course_id=teach_course.course_id and teach_course.teacher_id=teacher.teacher_id and
+              course.course_id = course_number.course_id
+    </select>
+
+    <select id="StudentSelectCourse" parameterType="java.lang.String" resultType="com.example.sp.model.CourseInfo">
+        select course.course_id, course.name as course_name, course.course_time, course.exam_time,
+               course.descs, teacher.name as teacher_name, teacher.teacher_id, course_number.amount
+        from teacher, take_course, course, teach_course, course_number
+        where take_course.student_id = #{student_id} and take_course.course_id=course.course_id and
+              teach_course.course_id=take_course.course_id and teacher.teacher_id=teach_course.teacher_id and
+              course.course_id = course_number.course_id
+    </select>
+
+    <select id="TeacherSelectCourse" parameterType="java.lang.String" resultType="com.example.sp.model.CourseInfo">
+        select course.course_id, course.name as course_name, course.course_time, course.exam_time,
+               course.descs, teacher.name as teacher_name, teacher.teacher_id, course_number.amount
+        from teacher, teach_course, course, course_number
+        where teacher.teacher_id = #{teacher_id} and teacher.teacher_id=teach_course.teacher_id and
+              teach_course.course_id=course.course_id and course.course_id = course_number.course_id
+    </select>
+
+    <select id="getCourseInfoByCourse_id" parameterType="java.lang.String" resultType="com.example.sp.model.CourseInfo">
+        select course.course_id, course.name as course_name, course.course_time, course.exam_time,
+               course.descs, teacher.name as teacher_name, teacher.teacher_id, course_number.amount
+        from teacher, teach_course, course, course_number
+        where course.course_id = #{course_id} and course.course_id=teach_course.course_id and
+              teach_course.teacher_id=teacher.teacher_id and course.course_id = course_number.course_id
+    </select>
+
+
+    <insert id="StudentJoinCourse" parameterType="com.example.sp.model.TakeCourse">
+        insert into take_course (course_id, student_id)
+        values (#{course_id}, #{student_id})
+    </insert>
+
+    <!-- 获得选课人数 -->
+    <select id="getCourseAmount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select amount from course_number where course_id = #{course_id}
+    </select>
+
+<!--更新选课人数，后面改
+-->
+    <update id="updateAmount" parameterType="com.example.sp.model.Student" >
+        update student
+        set password = #{password,jdbcType=VARCHAR},name = #{name,jdbcType=VARCHAR},gender = #{gender,jdbcType=VARCHAR},picture = #{picture,jdbcType=VARCHAR}
+        where student_id = #{student_id,jdbcType=VARCHAR}
+    </update>
+
+
+
+    <select id="selectCourseByUsername" parameterType="java.lang.String" resultType="com.example.sp.model.Course">
+        select * from course
+        where course_id = #{course_id,jdbcType=VARCHAR}
+    </select>
+    <insert id="insertCourse" parameterType="com.example.sp.model.Course">
+        insert into course (course_id, name, course_time, exam_time, descs)
+        values (#{course_id}, #{name}, #{course_time}, #{exam_time}, #{descs})
+    </insert>
+    <insert id="insertTeachCourse" parameterType="com.example.sp.model.TeachCourse">
+        insert into teach_course (course_id, teacher_id, amount)
+        values (#{course_id}, #{teacher_id}, #{amount})
+    </insert>
+
+    <!--    <select id="listUsers" resultType="com.example.sp.model.User">-->
+    <!--        select * from user order by #{id}-->
+    <!--    </select>-->
+
+    <update id="updateCourse" parameterType="com.example.sp.model.Course" >
+        update course
+        set name = #{name,jdbcType=VARCHAR},course_time = #{course_time,jdbcType=VARCHAR},exam_time = #{exam_time,jdbcType=VARCHAR},descs = #{descs,jdbcType=VARCHAR}
+        where course_id = #{course_id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateTeachCourse" parameterType="com.example.sp.model.TeachCourse" >
+        update teach_course
+        set teacher_id = #{teacher_id,jdbcType=VARCHAR}
+        where course_id = #{course_id,jdbcType=VARCHAR}
+    </update>
+
+
+    <delete id="deleteCourseByCourse_id" parameterType="java.lang.String" >
+        delete from course
+        where course_id = #{course_id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteTeachCourseByCourse_id" parameterType="java.lang.String" >
+        delete from teach_course
+        where course_id = #{course_id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteTakeCourseByCourse_id" parameterType="java.lang.String" >
+        delete from take_course
+        where course_id = #{course_id,jdbcType=VARCHAR}
+    </delete>
+
+
+    <!-- 获得选课学生列表 -->
+    <select id="getCourseRoster" parameterType="java.lang.String" resultType="java.lang.String">
+        select student_id from take_course
+        where course_id = #{course_id,jdbcType=VARCHAR}
+    </select>
+</mapper>

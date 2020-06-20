@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sp.dao.FileDao">
+
+    <insert id="addFile" parameterType="com.example.sp.model.ProjectFile">
+        insert into file (course_id, pj_id, user_id, upload_date, size, name, path, description)
+        values (#{course_id}, #{pj_id}, #{user_id}, #{upload_date}, #{size}, #{name}, #{path}, #{description})
+    </insert>
+
+    <select id="getFileList" parameterType="java.util.Map" resultType="com.example.sp.model.ProjectFile">
+        select * from file where course_id = #{course_id} and pj_id = #{pj_id}
+    </select>
+
+    <delete id="deleteFile" parameterType="java.lang.Integer">
+        delete from file
+        where file_id = #{file_id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="example.UserMapper">
+
+    <select id="findUserById" parameterType="int" resultType="com.example.sp.model.User">
+        select * from user where userID = #{userID}
+    </select>
+
+<!--    <select id="findUserByUsername" parameterType="java.lang.String" resultType="com.example.sp.model.User">-->
+<!--        select * from user where username = #{username}-->
+<!--    </select>-->
+    <select id="findStudentByUsername" parameterType="java.lang.String" resultType="com.example.sp.model.Student">
+        select * from student where student_id = #{student_id}
+    </select>
+    <select id="findTeacherByUsername" parameterType="java.lang.String" resultType="com.example.sp.model.Teacher">
+        select * from teacher where teacher_id = #{teacher_id}
+    </select>
+
+    <insert id="addStudent" parameterType="com.example.sp.model.Student">
+        insert into student (student_id, password, name, gender, picture)
+        values (#{student_id}, #{password}, #{name}, #{gender}, #{picture})
+    </insert>
+    <insert id="addTeacher" parameterType="com.example.sp.model.Teacher">
+        insert into teacher (teacher_id, password, name, gender, picture)
+        values (#{teacher_id}, #{password}, #{name}, #{gender}, #{picture})
+    </insert>
+<!--    <insert id="addUser" parameterType="com.example.sp.model.User" useGeneratedKeys="true" keyProperty="userID">-->
+<!--        insert into user (username, password, email, phone)-->
+<!--        values (#{username}, #{password}, #{email}, #{phone})-->
+<!--    </insert>-->
+
+    <select id="listUsers" resultType="com.example.sp.model.Student">
+        select * from student
+    </select>
+
+    <select id="listTeachers" resultType="com.example.sp.model.Teacher">
+        select * from teacher
+    </select>
+
+<!--    <select id="listUsers" resultType="com.example.sp.model.User">-->
+<!--        select * from user order by #{id}-->
+<!--    </select>-->
+
+    <update id="updateStudentByUsername" parameterType="com.example.sp.model.Student" >
+        update student
+        set password = #{password,jdbcType=VARCHAR},name = #{name,jdbcType=VARCHAR},gender = #{gender,jdbcType=VARCHAR},picture = #{picture,jdbcType=VARCHAR}
+        where student_id = #{student_id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateTeacherByUsername" parameterType="com.example.sp.model.Teacher" >
+        update teacher
+        set password = #{password,jdbcType=VARCHAR},name = #{name,jdbcType=VARCHAR},gender = #{gender,jdbcType=VARCHAR},picture = #{picture,jdbcType=VARCHAR}
+        where teacher_id = #{teacher_id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteStudentByUsername" parameterType="java.lang.String" >
+        delete from student
+        where student_id = #{student_id,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteTeacherByUsername" parameterType="java.lang.String" >
+        delete from teacher
+        where teacher_id = #{teacher_id,jdbcType=VARCHAR}
+    </delete>
+</mapper>
