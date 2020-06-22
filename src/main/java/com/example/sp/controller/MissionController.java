@@ -75,6 +75,7 @@ public class MissionController {
             sqlSession.insert("example.MissionMapper.insertMission", mission);
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            sqlSession.rollback();
             return new genFailedResponse(310, "success:创建新任务失败", new Date());
         } finally {
             sqlSession.commit();

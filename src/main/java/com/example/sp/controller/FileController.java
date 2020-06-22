@@ -52,6 +52,7 @@ public class FileController {
             System.out.println(path);
 
         } catch (Exception e) {
+
             return new genFailedResponse(310, "error: 上传文件失败", new Date());
         }
 
@@ -93,10 +94,11 @@ public class FileController {
             sqlSession.delete("com.example.sp.dao.FileDao.deleteFile", fileID);
         } catch (Exception e) {
             System.out.println("删除文件失败" + e.getMessage());
+            sqlSession.rollback();
             return new genFailedResponse(310, "删除文件失败", new Date());
         } finally {
             sqlSession.commit();
-        sqlSession.close();
+            sqlSession.close();
         }
         return new genFailedResponse(200, "删除成功", new Date());
     }

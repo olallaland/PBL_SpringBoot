@@ -15,11 +15,11 @@ import java.util.Date;
  */
 public class UploadUtil {
     public static String uploadFile(MultipartFile file) throws IOException {
-        //使用时间给上传的文件命名，这种方式没有用uuid命名好，因为同一时间有可能会上传多个文件
+        // 使用时间给上传的文件命名
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSS");
         String res = sdf.format(new Date());
         String originaFilename = file.getOriginalFilename();
-        //获取文件的后缀名
+        // 获取文件的后缀名
         String newFileName = res + originaFilename.substring(originaFilename.lastIndexOf("."));
 
         String rootPath1 = "/files/";

@@ -74,11 +74,12 @@ public class CourseController {
             sqlSession.insert("example.CourseMapper.StudentJoinCourse", tc);
         } catch (Exception e) {
              System.out.println(e.getMessage());
+             sqlSession.rollback();
              return new genFailedResponse(310, "error:不能重复加入课程", new Date());
+        } finally {
+             sqlSession.commit();
+             sqlSession.close();
         }
-
-        sqlSession.commit();
-        sqlSession.close();
         return new genSuccessfulResponse(200, "success:加入课程成功", tc);
 
     }
@@ -96,6 +97,7 @@ public class CourseController {
         } catch (Exception e) {
             System.out.println("------删除课程失败------");
             System.out.println(e.getMessage());
+            sqlSession.rollback();
             return new genFailedResponse(310, "error:删除课程失败", new Date());
         } finally {
             sqlSession.commit();
@@ -127,9 +129,7 @@ public class CourseController {
             sqlSession.commit();
             sqlSession.close();
             return new genSuccessfulResponse(200, "success：注册成功", courseRequest);
-
         }
-
 
         sqlSession.close();
         return new genFailedResponse(310, "error:添加课程失败", new Date());
@@ -170,9 +170,7 @@ public class CourseController {
             sqlSession.commit();
             sqlSession.close();
             return new genSuccessfulResponse(200, "success：更新课程信息成功", courseRequest);
-
         }
-
 
         sqlSession.close();
         return new genFailedResponse(310, "error:更新课程信息失败", new Date());

@@ -21,7 +21,6 @@ import java.util.List;
 @RequestMapping("/pbl/discussion")
 public class DiscussionController {
 
-
     //获得某个课程下发起的讨论
     @RequestMapping(value = "/getDiscussionList/{courseID}/{projectID}", method = RequestMethod.POST)
     @ResponseBody

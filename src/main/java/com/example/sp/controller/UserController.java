@@ -85,44 +85,32 @@ public class UserController {
         return new genFailedResponse(310, "error:管理员不能注册", new Date());
     }
 
-//    @RequestMapping(value = "/register", method = RequestMethod.POST)
-//    @ResponseBody
-//    public ResponseBean register(@RequestBody RegisterRequest registerRequest) throws IOException {
-//
-//        System.out.println("username: "+registerRequest.getUsername()+" ; password: "+registerRequest.getPassword()+"-----------------------------");
-//        SqlSession sqlSession = SqlSessionLoader.getSqlSession();
-//        if (registerRequest.getType().equals("student")) {
-//            Student student = sqlSession.selectOne("example.UserMapper.findStudentByUsername", registerRequest.getUsername());
-//            if (student != null) {
-//                sqlSession.close();
-//                return new genFailedResponse(310, "error: 该学生用户已存在", new Date());
-//
-//            } else {
-//                Student stu = new Student(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getName(), registerRequest.getGender(), registerRequest.getPicture());
-//                sqlSession.insert("example.UserMapper.addStudent", stu);
-//                sqlSession.commit();
-//                sqlSession.close();
-//                return new genSuccessfulResponse(200, "success：注册成功", stu);
-//            }
-//        }
-//
-//        if (registerRequest.getType().equals("teacher")) {
-//            Teacher teacher = sqlSession.selectOne("example.UserMapper.findTeacherByUsername", registerRequest.getUsername());
-//            if (teacher != null) {
-//                sqlSession.close();
-//                return new genFailedResponse(310, "error: 该教师用户已存在", new Date());
-//
-//            } else {
-//                Teacher tea = new Teacher(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getName(), registerRequest.getGender(), registerRequest.getPicture());
-//                sqlSession.insert("example.UserMapper.addTeacher", tea);
-//                sqlSession.commit();
-//                sqlSession.close();
-//                return new genSuccessfulResponse(200, "success：注册成功", tea);
-//            }
-//        }
-//        sqlSession.close();
-//        return new genFailedResponse(310, "error:管理员不能注册", new Date());
-//    }
+    @RequestMapping(value = "/findUserByID/{type}/{userID}", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseBean register(@PathVariable String type,
+                                 @PathVariable String userID) throws IOException {
+
+        SqlSession sqlSession = SqlSessionLoader.getSqlSession();
+        if (type.equals("student")) {
+            Student student = sqlSession.selectOne("example.UserMapper.findStudentByUsername", userID);
+            if (student != null) {
+                return new genSuccessfulResponse(200, "success：成功", student);
+            } else {
+                return new genFailedResponse(310, "error: 找不到该用户", new Date());
+            }
+        }
+
+        if (type.equals("teacher")) {
+            Teacher teacher = sqlSession.selectOne("example.UserMapper.findTeacherByUsername", userID);
+            if (teacher == null) {
+                return new genFailedResponse(310, "error: 找不到该用户", new Date());
+            } else {
+                return new genSuccessfulResponse(200, "success：成功", teacher);
+            }
+        }
+        sqlSession.close();
+        return new genFailedResponse(310, "error:未知错误", new Date());
+    }
 
     @RequestMapping("/login")
     @ResponseBody

@@ -114,6 +114,7 @@ public class ProjectController {
             sqlSession.delete("example.ProjectMapper.deleteProjectById", projectRequest);
         } catch (Exception e) {
             System.out.println("删除项目失败" + e.getMessage());
+            sqlSession.rollback();
             return new genFailedResponse(310, "error:删除项目失败", new Date());
         } finally {
             sqlSession.commit();
